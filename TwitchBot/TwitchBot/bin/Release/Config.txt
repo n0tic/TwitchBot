@@ -1,6 +1,6 @@
-﻿[BotName] = "TwitchMultiGame"
-[oAuthPassword] = "oauth:sbx3da34qypxddfzkct9gqmex5gl6y"
-[ChannelName] = "officialn0tic"
+﻿[BotName] = ""
+[oAuthPassword] = ""
+[ChannelName] = ""
 
 [Host] = "irc.chat.twitch.tv"
 [Port] = "6667"
