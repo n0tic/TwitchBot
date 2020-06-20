@@ -13,9 +13,9 @@ The twitch features are running on 3 different threads. Main thread is covering 
 2. Sign in to the account you want the bot to operate from and request an oAuth key from https://twitchapps.com/tmi/
 3. Edit Config.txt with the correct data input and syntaxes:
 
->[BotName] = "HungryBot"
->[oAuthPassword] = "" //Key from: https://twitchapps.com/tmi/ (Sign in to the correct account when requesting)
->[ChannelName] = "" // The channel the bot should join
->
->[Host] = "irc.chat.twitch.tv" // IRC address | IP
+>[BotName] = "HungryBot"  
+>[oAuthPassword] = "" //Key from: https://twitchapps.com/tmi/ (Make sure you are signed into the correct account.)
+>[ChannelName] = "" // The channel the bot should join  
+>  
+>[Host] = "irc.chat.twitch.tv" // IRC address | IP  
 >[Port] = "6667" // Port
