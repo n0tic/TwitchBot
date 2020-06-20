@@ -1,6 +1,0 @@
-﻿[BotName] = ""
-[oAuthPassword] = ""
-[ChannelName] = ""
-
-[Host] = "irc.chat.twitch.tv"
-[Port] = "6667"
