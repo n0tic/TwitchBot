@@ -13,3 +13,11 @@ C:\Users\N0tiC\source\repos\HungryBot\TwitchBot\obj\Release\TwitchBot.csprojAsse
 C:\Users\N0tiC\source\repos\HungryBot\TwitchBot\obj\Release\TwitchBot.csproj.CoreCompileInputs.cache
 C:\Users\N0tiC\source\repos\HungryBot\TwitchBot\obj\Release\HungryBot.exe
 C:\Users\N0tiC\source\repos\HungryBot\TwitchBot\obj\Release\HungryBot.pdb
+C:\Users\N0tiC\source\repos\TwitchBot\TwitchBot\bin\Release\Config.txt
+C:\Users\N0tiC\source\repos\TwitchBot\TwitchBot\bin\Release\HungryBot.exe.config
+C:\Users\N0tiC\source\repos\TwitchBot\TwitchBot\bin\Release\HungryBot.exe
+C:\Users\N0tiC\source\repos\TwitchBot\TwitchBot\bin\Release\HungryBot.pdb
+C:\Users\N0tiC\source\repos\TwitchBot\TwitchBot\obj\Release\TwitchBot.csprojAssemblyReference.cache
+C:\Users\N0tiC\source\repos\TwitchBot\TwitchBot\obj\Release\TwitchBot.csproj.CoreCompileInputs.cache
+C:\Users\N0tiC\source\repos\TwitchBot\TwitchBot\obj\Release\HungryBot.exe
+C:\Users\N0tiC\source\repos\TwitchBot\TwitchBot\obj\Release\HungryBot.pdb

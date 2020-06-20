@@ -1,4 +1,4 @@
-﻿[BotName] = ""
+﻿﻿[BotName] = ""
 [oAuthPassword] = ""
 [ChannelName] = ""
 
