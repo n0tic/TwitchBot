@@ -7,6 +7,20 @@ Syntax is [VarName] = "VarValue".
 
 The twitch features are running on 3 different threads. Main thread is covering command input, another is for reading chat and one additional for sending messages.
 
+## A few commands on client side
+```
+help or commands - Shows a list of commands and a brief decription
+reconnect - Kills the current connection and all active threads. Creates new connection but keeps hungry statistics.
+reset - Resets the hungry statistics
+quit or exit - Application will shutdown.
+```
+## A few commands on twitch chat
+```
+!hungry - This command will add +1 to the counter IF enough time has passed (30 seconds since last time)
+!howhungry - This command will print out how many times the word hungry has been counted.
+!hungrycount - This command will print out how many times !hungry has been said in the chat regardless of the timer.
+!help - Will print out the commands and a brief description.
+```
 ---------------------------------------------------------------------------------------------------------------------------------------
 # Setup steps:
 1. (Optional)My recommendation is to create a new twitch account and name it something "witty" like "HungryBot". Witty, right?
