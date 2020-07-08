@@ -58,7 +58,7 @@ namespace TwitchBot
                         Console.WriteLine("\"help\", \"commands\" will show this console window.");
                         Console.WriteLine("\"reset\" will reset the counter and clear memory.");
                         Console.WriteLine("\"reconnect\" will reconnect the bot but keep data.");
-                        Console.WriteLine("\"stats\", \"status\" will print out data from the current session.");
+                        Console.WriteLine("\"stats\", \"status\", \"count\" will print out data from the current session.");
                         Console.WriteLine("\"quit\", \"exit\" will shutdown the bot.");
                         break;
                     case "reconnect": // Reconnect and save data
@@ -74,6 +74,7 @@ namespace TwitchBot
                         break;
                     case "stats":
                     case "status":
+                    case "count":
                         Console.Clear();
                         Console.WriteLine("The word \"hungry\" has been said " + twitchChatBot.hungry.timesHungry.ToString() + " time(s). Total count of !hungry is " + twitchChatBot.hungry.timesHungryTotal.ToString());
                         break;
