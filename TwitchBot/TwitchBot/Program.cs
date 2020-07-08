@@ -15,6 +15,10 @@ using System.Runtime.Serialization.Formatters.Binary;
 
 namespace TwitchBot
 {
+    /// <summary>
+    /// Version 0.1
+    /// </summary>
+
     public class Program
     {
         //Twitch bot (Read, Send, Resolve)
