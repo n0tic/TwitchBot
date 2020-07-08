@@ -7,6 +7,8 @@ Syntax is [VarName] = "VarValue".
 
 The twitch features are running on 3 different threads. Main thread is covering command input, another is for reading chat and one additional for sending messages.
 
+![](http://bytevaultstudio.se/ShareX/HungryBot_o6fQtuDLs4.png)
+
 ## A few commands on client side
 ```
 help or commands - Shows a list of commands and a brief decription
