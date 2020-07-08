@@ -11,19 +11,20 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Runtime.Serialization.Formatters.Binary;
 
 namespace TwitchBot
 {
     public class Program
     {
+        //Twitch bot (Read, Send, Resolve)
         public static TwitchChatBot twitchChatBot;
 
-        static List<Dictionary<string, string>> data = new List<Dictionary<string, string>>();
-        static string[] Loc_name = new string[3];
-        static string[] Loc_value = new string[3];
+        static List<Dictionary<string, string>> data = new List<Dictionary<string, string>>(); //Config.txt data
 
         static void Main(string[] args)
         {
+            //Title of the console window
             Console.Title = "Simple Twitch Chat Bot";
 
             // Turn off Quick Edit Mode
@@ -36,7 +37,7 @@ namespace TwitchBot
             {
                 // We create the chatbot object
                 twitchChatBot = new TwitchChatBot(data[0]["Host"], Int32.Parse(data[0]["Port"]), data[0]["BotName"], data[0]["oAuthPassword"], data[0]["ChannelName"], true);
-                Console.WriteLine("!help");
+                Console.WriteLine("Client commands? Write \"help\"");
             }
             catch (KeyNotFoundException e)
             {
@@ -57,10 +58,11 @@ namespace TwitchBot
                         Console.WriteLine("\"help\", \"commands\" will show this console window.");
                         Console.WriteLine("\"reset\" will reset the counter and clear memory.");
                         Console.WriteLine("\"reconnect\" will reconnect the bot but keep data.");
+                        Console.WriteLine("\"stats\", \"status\" will print out data from the current session.");
                         Console.WriteLine("\"quit\", \"exit\" will shutdown the bot.");
                         break;
                     case "reconnect": // Reconnect and save data
-                        HungryData hungry = twitchChatBot.hungry;
+                        HungryData hungry = ObjectClone<HungryData>(twitchChatBot.hungry);
                         twitchChatBot.KillThreads();
                         twitchChatBot = new TwitchChatBot(data[0]["Host"], Int32.Parse(data[0]["Port"]), data[0]["BotName"], data[0]["oAuthPassword"], data[0]["ChannelName"], true);
                         twitchChatBot.hungry = hungry;
@@ -70,11 +72,34 @@ namespace TwitchBot
                         Console.Clear();
                         Console.WriteLine("Program reset!");
                         break;
+                    case "stats":
+                    case "status":
+                        Console.Clear();
+                        Console.WriteLine("The word \"hungry\" has been said " + twitchChatBot.hungry.timesHungry.ToString() + " time(s). Total count of !hungry is " + twitchChatBot.hungry.timesHungryTotal.ToString());
+                        break;
                     case "quit":
                     case "exit":
                         Environment.Exit(0);
                         break;
                 }
+            }
+        }
+
+        /// <summary>
+        /// Takes an object and copies it rather than storing the reference data.
+        /// </summary>
+        /// <typeparam name="T">Object Type</typeparam>
+        /// <param name="obj">Object</param>
+        /// <returns>Copied Object Type + Data</returns>
+        static T ObjectClone<T>(T obj)
+        {
+            using (var ms = new MemoryStream())
+            {
+                var formatter = new BinaryFormatter();
+                formatter.Serialize(ms, obj);
+                ms.Position = 0;
+
+                return (T)formatter.Deserialize(ms);
             }
         }
 
@@ -95,6 +120,8 @@ namespace TwitchBot
         static void ResolveContent(string[] fileContent)
         {
             Dictionary<string, string> language = new Dictionary<string, string>();
+            string[] Loc_name = new string[3]; // Temp data from Config.txt
+            string[] Loc_value = new string[3]; // Temp data from Config.txt
 
             for (int i = 0; i < fileContent.Length; i++)
             {

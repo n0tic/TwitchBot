@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace TwitchBot
 {
+    [System.Serializable]
     public struct HungryData
     {
         public DateTime nextTime;

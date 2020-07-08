@@ -103,7 +103,7 @@ namespace TwitchBot.Object
                 commandSender.Start();
                 commandReader = new Thread(() => Update());
                 commandReader.Start();
-                Console.WriteLine("Bot connected and operational.");
+                Console.WriteLine("Bot connected and operational. Connected to " + connectionData.channelName);
             }
         }
 
@@ -130,12 +130,9 @@ namespace TwitchBot.Object
         {
             System.Diagnostics.Stopwatch stopWatch = new System.Diagnostics.Stopwatch();
             stopWatch.Start();
-            while (runCommandSender)
-            {
-                if (messageQueue.Count > 0 && twitchChat.Connected)
-                {
-                    if (stopWatch.ElapsedMilliseconds > 1750)
-                    {
+            while (runCommandSender) {
+                if (messageQueue.Count > 0 && twitchChat.Connected) {
+                    if (stopWatch.ElapsedMilliseconds > 1750) { // Check so that enough time has passed.
                         writer.WriteLine(messageQueue.Peek());
                         writer.Flush();
 
@@ -155,10 +152,8 @@ namespace TwitchBot.Object
         /// </summary>
         void ReadChat()
         {
-            if (twitchChat.Available > 0)
-            {
+            if (twitchChat.Available > 0) {
                 string message = reader.ReadLine();
-                //Console.WriteLine(message);
 
                 if (message.Contains("PING"))
                 {
@@ -202,7 +197,7 @@ namespace TwitchBot.Object
                     break;
                 case "!howhungry":
                     Console.WriteLine(DateTime.Now + ": The word \"hungry\" has been said " + hungry.timesHungry.ToString() + " time(s). (Only counts 1 per 30 seconds)");
-                    SendMsg("The word \"hungry\" has been said " + hungry.timesHungry.ToString() + " time(s). (Only counts 1 per 30 seconds)");
+                    SendMsg("The word \"hungry\" has been said " + hungry.timesHungry.ToString() + " time(s).");
                     break;
                 case "!hungrycount":
                     Console.WriteLine(DateTime.Now + ": Counted the command \"!hungry\" being called " + hungry.timesHungryTotal.ToString() + " time(s).");
