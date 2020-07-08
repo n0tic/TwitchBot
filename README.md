@@ -12,6 +12,7 @@ The twitch features are running on 3 different threads. Main thread is covering 
 help or commands - Shows a list of commands and a brief decription
 reconnect - Kills the current connection and all active threads. Creates new connection but keeps hungry statistics.
 reset - Resets the hungry statistics
+stats, status, count - Shows data from the current session.
 quit or exit - Application will shutdown.
 ```
 ## A few commands on twitch chat
