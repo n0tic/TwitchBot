@@ -1,7 +1,0 @@
-C:\Users\N0tiC\source\repos\HungryBot\HungryBot\bin\Debug\HungryBot.exe.config
-C:\Users\N0tiC\source\repos\HungryBot\HungryBot\bin\Debug\HungryBot.exe
-C:\Users\N0tiC\source\repos\HungryBot\HungryBot\bin\Debug\HungryBot.pdb
-C:\Users\N0tiC\source\repos\HungryBot\HungryBot\obj\Debug\HungryBot.csprojAssemblyReference.cache
-C:\Users\N0tiC\source\repos\HungryBot\HungryBot\obj\Debug\HungryBot.csproj.CoreCompileInputs.cache
-C:\Users\N0tiC\source\repos\HungryBot\HungryBot\obj\Debug\HungryBot.exe
-C:\Users\N0tiC\source\repos\HungryBot\HungryBot\obj\Debug\HungryBot.pdb
