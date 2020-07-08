@@ -29,7 +29,7 @@ quit or exit - Application will shutdown.
 3. Edit Config.txt with the correct data input and syntaxes:
 
 >[BotName] = "HungryBot"  
->[oAuthPassword] = "" //Key from: https://twitchapps.com/tmi/ (Make sure you are signed into the correct account.)
+>[oAuthPassword] = "" //Key from: https://twitchapps.com/tmi/ (Sign-in into the correct account first)
 >[ChannelName] = "" // The channel the bot should join  
 >  
 >[Host] = "irc.chat.twitch.tv" // IRC address | IP  
