@@ -36,3 +36,6 @@ quit or exit - Application will shutdown.
 >  
 >[Host] = "irc.chat.twitch.tv" // IRC address | IP  
 >[Port] = "6667" // Port
+
+### Twitch updates
+Twitch had an update recently which affects the chat. I noticed the bot was unable or was refused to use the chat of offline channels. This may be a permanent patch from twitch or a temporary one. In any case, this is important to note.
