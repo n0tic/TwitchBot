@@ -1,15 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Runtime.InteropServices;
 
 namespace TwitchBot.Extra
 {
-    public static class DisableConsoleQuickEdit
-    {
-
+    public static class DisableConsoleQuickEdit {
         const uint ENABLE_QUICK_EDIT = 0x0040;
 
         // STD_INPUT_HANDLE (DWORD): -10 is the standard input device.
@@ -24,9 +18,7 @@ namespace TwitchBot.Extra
         [DllImport("kernel32.dll")]
         static extern bool SetConsoleMode(IntPtr hConsoleHandle, uint dwMode);
 
-        public static bool SetQuickEdit(bool SetEnabled)
-        {
-
+        public static bool SetQuickEdit(bool SetEnabled) {
             IntPtr consoleHandle = GetStdHandle(STD_INPUT_HANDLE);
 
             // get current console mode

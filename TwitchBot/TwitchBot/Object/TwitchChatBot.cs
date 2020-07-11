@@ -2,17 +2,21 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Net.Sockets;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
+using System.Net;
+using Newtonsoft.Json;
+
+/*
+ * https://clips.twitch.tv/LightKnottyDiscPeoplesChamp
+ * https://clips.twitch.tv/BlightedAmericanVampireJKanStyle
+ * https://clips.twitch.tv/SaltyJoyousLardTBTacoLeft
+ */
 
 namespace TwitchBot.Object
 {
-    public class TwitchChatBot
-    {
-        ConnectionData connectionData;
+    public class TwitchChatBot {
+        public ConnectionData connectionData;
         public HungryData hungry = new HungryData();
 
         TcpClient twitchChat;
@@ -33,7 +37,7 @@ namespace TwitchBot.Object
         {
             while(true)
             {
-                //Does this trigger an error since it is running on a different thread? Probably.
+                //Does this trigger an error since it is running on a different thread? Probably, commenting out.
                 //if (twitchChat == null || !twitchChat.Connected && reconnect) Connect();
 
                 ReadChat();
@@ -44,8 +48,7 @@ namespace TwitchBot.Object
         /// <summary>
         /// Kills both threads.
         /// </summary>
-        public void KillThreads()
-        {
+        public void KillThreads() {
             commandSender.Abort();
             commandReader.Abort();
         }
@@ -59,11 +62,14 @@ namespace TwitchBot.Object
         /// <param name="password">string oAuthPassword</param>
         /// <param name="channelName">string channelname to join</param>
         /// <param name="reConnect">bool reconnect feature</param>
-        public TwitchChatBot(string host, int port, string username, string password, string channelName, bool reConnect)
-        {
+        public TwitchChatBot(string host, int port, string username, string password, string channelName, string _onlineMode, bool reConnect) {
             hungry = new HungryData();
 
             connectionData = new ConnectionData();
+            if (_onlineMode == "TRUE")
+                connectionData.onlineMode = true;
+            else
+                connectionData.onlineMode = false;
             connectionData.host = host;
             connectionData.port = port;
 
@@ -103,7 +109,10 @@ namespace TwitchBot.Object
                 commandSender.Start();
                 commandReader = new Thread(() => Update());
                 commandReader.Start();
-                Console.WriteLine("Bot connected and operational. Connected to " + connectionData.channelName);
+                Console.WriteLine("Bot connected to " + connectionData.channelName + ". Online mode: " + connectionData.onlineMode.ToString());
+
+                if(connectionData.onlineMode)
+                    DownloadHungry();
             }
         }
 
@@ -192,21 +201,87 @@ namespace TwitchBot.Object
                     if (DateTime.Now > hungry.nextTime)
                     {
                         hungry.timesHungry++;
+                        if (connectionData.onlineMode)
+                            SendHungry();
                         hungry.nextTime = DateTime.Now.AddSeconds(30);
+                        Console.WriteLine("IN: " + DateTime.Now + " - Hungry registered!");
                     }
                     break;
                 case "!howhungry":
-                    Console.WriteLine(DateTime.Now + ": The word \"hungry\" has been said " + hungry.timesHungry.ToString() + " time(s). (Only counts 1 per 30 seconds)");
+                    Console.WriteLine("OUT: " + DateTime.Now + " - The word \"hungry\" has been said " + hungry.timesHungry.ToString() + " time(s).");
                     SendMsg("The word \"hungry\" has been said " + hungry.timesHungry.ToString() + " time(s).");
                     break;
                 case "!hungrycount":
-                    Console.WriteLine(DateTime.Now + ": Counted the command \"!hungry\" being called " + hungry.timesHungryTotal.ToString() + " time(s).");
+                    Console.WriteLine("OUT: " + DateTime.Now + " - Counted the command \"!hungry\" being called " + hungry.timesHungryTotal.ToString() + " time(s).");
                     SendMsg("Counted the command \"!hungry\" being called " + hungry.timesHungryTotal.ToString() + " time(s).");
                     break;
                 case "!help":
-                    Console.WriteLine(DateTime.Now + ": !hungry, !howhungry, !hungrycount, !help. !hungry should be called once the word \"Hungry\" is heard on stream. !howhungry will print out how many times it has been counted. !hungrycount will print out all the counted commands, even those within the 1 per 30 seconds rule. !hungrycount will print out ALL the times !hungry was found in chat. !help displays this message.");
-                    SendMsg("!hungry, !howhungry, !help. !hungry should be called once the word \"Hungry\" is heard on stream. !howhungry will print out how many times it has been counted. !hungrycount will print out all the counted commands, even those within the 1 per 30 seconds rule. !hungrycount will print out ALL the times !hungry was found in chat. !help displays this message.");
+                    Console.WriteLine("OUT: " +  DateTime.Now + " - !hungry should be called once the word \"Hungry\" is heard verbally on stream. !howhungry will print out how many times it has been counted. !hungrycount will print out ALL the times \"!hungry\" was found in chat. !help displays this message.");
+                    SendMsg("!hungry should be called once the word \"Hungry\" is heard verbally on stream. !howhungry will print out how many times it has been counted. !hungrycount will print out ALL the times \"!hungry\" was found in chat. !help displays this message.");
                     break;
+            }
+        }
+
+        public void DownloadHungry()
+        {
+            using (WebClient wc = new WebClient())
+            {
+                wc.DownloadStringCompleted += Wc_DownloadStringCompleted;
+                wc.Encoding = System.Text.Encoding.UTF8;
+                wc.Headers[HttpRequestHeader.ContentType] = "application/json";
+                wc.DownloadStringAsync(new Uri("https://bytevaultstudio.se/projects/mix/TwitchBot/?ch=" + connectionData.channelName + "&d"));
+            }
+        }
+
+        private void Wc_DownloadStringCompleted(object sender, DownloadStringCompletedEventArgs e)
+        {
+            if(e.Error == null)
+            {
+                switch (e.Result)
+                {
+                    case "NoContent":
+                    case "NoFile":
+                        Console.WriteLine("Console: No data could be found. Using new data.");
+                        break;
+                    default:
+                        try
+                        {
+                            hungry = JsonConvert.DeserializeObject<HungryData>(e.Result);
+                            Console.WriteLine("Console: Data loaded.");
+                        }
+                        catch (JsonException)
+                        {
+                            Console.WriteLine("Console: Deserialize of data failed. Resettings data.");
+                        }
+                        break;
+                }
+            }
+        }
+
+        public void SendHungry() {
+            string data = JsonConvert.SerializeObject(hungry);
+
+            using(WebClient wc = new WebClient()) {
+                wc.UploadStringCompleted += Wc_UploadStringCompleted;
+                wc.Encoding = System.Text.Encoding.UTF8;
+                wc.Headers[HttpRequestHeader.ContentType] = "application/json";
+                wc.UploadStringAsync(new Uri("https://bytevaultstudio.se/projects/mix/TwitchBot/?ch=" + connectionData.channelName + "&u"), "POST", data);
+            }
+        }
+
+        private void Wc_UploadStringCompleted(object sender, UploadStringCompletedEventArgs e) {
+            if (e.Error == null)
+            {
+                switch (e.Result)
+                {
+                    case "OK":
+                        Console.WriteLine("Console: Upload complete.");
+                        break;
+                    case "NoWrite":
+                    case "NoAccess":
+                        Console.WriteLine("Console: Upload failed.");
+                        break;
+                }
             }
         }
 

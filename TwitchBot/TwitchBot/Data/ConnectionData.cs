@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace TwitchBot.Data
+﻿namespace TwitchBot.Data
 {
     public struct ConnectionData
     {
+        public bool onlineMode;
         public string host;
         public int port;
 
