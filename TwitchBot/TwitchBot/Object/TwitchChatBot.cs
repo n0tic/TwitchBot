@@ -7,12 +7,6 @@ using System.Threading;
 using System.Net;
 using Newtonsoft.Json;
 
-/*
- * https://clips.twitch.tv/LightKnottyDiscPeoplesChamp
- * https://clips.twitch.tv/BlightedAmericanVampireJKanStyle
- * https://clips.twitch.tv/SaltyJoyousLardTBTacoLeft
- */
-
 namespace TwitchBot.Object
 {
     public class TwitchChatBot {
