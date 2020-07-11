@@ -7,6 +7,8 @@ Syntax is [VarName] = "VarValue".
 
 The twitch features are running on 3 different threads. Main thread is covering command input, another is for reading chat and one additional for sending messages.
 
+The Online features are uploading statistics to my website by creating a .json file with the statistic data from the channel name. PHP Preview is coming soon.
+
 ![](http://bytevaultstudio.se/ShareX/HungryBot_o6fQtuDLs4.png)
 
 ## A few commands on client side
@@ -39,3 +41,28 @@ quit or exit - Application will shutdown.
 
 ### Bugs
 >I noticed that the bot was having problems connecting and reading some chats. I tried logging in to the bot account and it started working again.
+
+# Third Parties Licenses
+### Newtonsoft Json
+```
+The MIT License (MIT)
+
+Copyright (c) 2007 James Newton-King
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of
+this software and associated documentation files (the "Software"), to deal in
+the Software without restriction, including without limitation the rights to
+use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+the Software, and to permit persons to whom the Software is furnished to do so,
+subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+```
