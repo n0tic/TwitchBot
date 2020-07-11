@@ -9,7 +9,7 @@ The twitch features are running on 3 different threads. Main thread is covering 
 
 The Online features are uploading statistics to my website by creating a .json file with the statistic data from the channel name. PHP Preview is coming soon.
 
-![](http://bytevaultstudio.se/ShareX/HungryBot_o6fQtuDLs4.png)
+![](http://bytevaultstudio.se/ShareX/HungryBot_jWH9wpuXaL.png)
 
 ## A few commands on client side
 ```
