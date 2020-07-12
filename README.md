@@ -33,6 +33,7 @@ quit or exit - Application will shutdown.
 1. (Optional)My recommendation is to create a new twitch account and name it something "witty" like "HungryBot". Witty, right?
 2. Sign in to the account you want the bot to operate from and request an oAuth key from https://twitchapps.com/tmi/
 3. Edit Config.txt with the correct data input and syntaxes:
+4. (NOT IMPLEMENTED YET)(Optional) Upload index.php to a webserver and simply enter the URL to that specific file.
 
 >[BotName] = "HungryBot"  
 >[oAuthPassword] = "" //Key from: https://twitchapps.com/tmi/ (Sign-in into the correct account first)   
