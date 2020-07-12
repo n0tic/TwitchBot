@@ -12,7 +12,8 @@ namespace TwitchBot
 {
     public class Program
     {
-        const string version = "v0.2";
+        const string version = "V0.3";
+        public static bool debug = true;
 
         //Twitch bot (Read, Send, Resolve)
         public static TwitchChatBot twitchChatBot;
@@ -36,15 +37,20 @@ namespace TwitchBot
 
             try
             {
-                if (data[0]["Host"] == string.Empty || data[0]["BotName"] == string.Empty || data[0]["BotName"] == string.Empty || data[0]["oAuthPassword"] == string.Empty || data[0]["ChannelName"] == string.Empty || data[0]["OnlineMode"] == string.Empty)
+                if (data[0]["Host"] == string.Empty || data[0]["BotName"] == string.Empty || data[0]["BotName"] == string.Empty || data[0]["oAuthPassword"] == string.Empty || data[0]["ChannelName"] == string.Empty || data[0]["OnlineMode"] == string.Empty || data[0]["OnlineURL"] == string.Empty || data[0]["DEBUG"] == string.Empty)
                 {
                     Console.WriteLine("Config.txt is not configured correctly. Message: Empty config entry found.");
                     Thread.Sleep(8000);
                     Environment.Exit(0);
                 }
 
+                if (data[0]["DEBUG"].ToUpper() == "TRUE")
+                    debug = true;
+                else
+                    debug = false;
+
                 // We create the chatbot object
-                twitchChatBot = new TwitchChatBot(data[0]["Host"], Int32.Parse(data[0]["Port"]), data[0]["BotName"], data[0]["oAuthPassword"], data[0]["ChannelName"], data[0]["OnlineMode"], true);
+                twitchChatBot = new TwitchChatBot(data[0]["Host"], Int32.Parse(data[0]["Port"]), data[0]["BotName"], data[0]["oAuthPassword"], data[0]["ChannelName"], data[0]["OnlineMode"], data[0]["OnlineURL"], true);
                 Console.WriteLine("Client commands? Write \"help\" or \"commands\"");
             }
             catch (KeyNotFoundException e)
@@ -74,7 +80,7 @@ namespace TwitchBot
                     case "reconnect": // Reconnect and save data
                         HungryData hungry = ObjectClone<HungryData>(twitchChatBot.hungry);
                         twitchChatBot.KillThreads();
-                        twitchChatBot = new TwitchChatBot(data[0]["Host"], Int32.Parse(data[0]["Port"]), data[0]["BotName"], data[0]["oAuthPassword"], data[0]["ChannelName"], data[0]["OnlineMode"], true);
+                        twitchChatBot = new TwitchChatBot(data[0]["Host"], Int32.Parse(data[0]["Port"]), data[0]["BotName"], data[0]["oAuthPassword"], data[0]["ChannelName"], data[0]["OnlineMode"], data[0]["OnlineURL"], true);
                         twitchChatBot.hungry = hungry;
                         break;
                     case "reset":

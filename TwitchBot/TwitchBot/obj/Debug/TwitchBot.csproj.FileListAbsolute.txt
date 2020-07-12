@@ -1,0 +1,8 @@
+C:\Users\N0tiC\source\repos\TwitchBot\TwitchBot\bin\Debug\Config.txt
+C:\Users\N0tiC\source\repos\TwitchBot\TwitchBot\bin\Debug\HungryBot.exe.config
+C:\Users\N0tiC\source\repos\TwitchBot\TwitchBot\bin\Debug\HungryBot.exe
+C:\Users\N0tiC\source\repos\TwitchBot\TwitchBot\bin\Debug\HungryBot.pdb
+C:\Users\N0tiC\source\repos\TwitchBot\TwitchBot\obj\Debug\TwitchBot.csproj.CoreCompileInputs.cache
+C:\Users\N0tiC\source\repos\TwitchBot\TwitchBot\obj\Debug\HungryBot.exe
+C:\Users\N0tiC\source\repos\TwitchBot\TwitchBot\obj\Debug\HungryBot.pdb
+C:\Users\N0tiC\source\repos\TwitchBot\TwitchBot\obj\Debug\TwitchBot.csprojAssemblyReference.cache
