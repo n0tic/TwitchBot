@@ -1,13 +1,13 @@
 # TwitchBot
-A simple twitchbot which was a "requested" "HungryBot" ~ A hungry counter with a few commands on both client and chat side.
+A simple twitchbot which was a requested "HungryBot" ~ A hungry counter with a few commands on both client and chat side.
 Very easy to follow and modify.
+
+The twitch features are running on 3 different threads. Main thread is covering command input, another is for reading chat and one additional for sending messages. Async operations.
+
+The Online features are uploading statistics to my website by creating a .json file with the statistic data from the channel name. PHP Preview is coming soon.
 
 It reads the connection information from an external Config.txt source file.
 Syntax is [VarName] = "VarValue".
-
-The twitch features are running on 3 different threads. Main thread is covering command input, another is for reading chat and one additional for sending messages.
-
-The Online features are uploading statistics to my website by creating a .json file with the statistic data from the channel name. PHP Preview is coming soon.
 
 ![](http://bytevaultstudio.se/ShareX/HungryBot_jWH9wpuXaL.png)
 
