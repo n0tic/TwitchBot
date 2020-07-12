@@ -14,9 +14,11 @@ Syntax is [VarName] = "VarValue".
 ## A few commands on client side
 ```
 help or commands - Shows a list of commands and a brief decription
+reset - Reset the counter and clear memory.
 reconnect - Kills the current connection and all active threads. Creates new connection but keeps hungry statistics.
-reset - Resets the hungry statistics
 stats, status, count - Shows data from the current session.
+clear - Clears the console.
+upload - Uploads statistics to website.
 quit or exit - Application will shutdown.
 ```
 ## A few commands on twitch chat
