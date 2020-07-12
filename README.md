@@ -33,11 +33,13 @@ quit or exit - Application will shutdown.
 1. (Optional)My recommendation is to create a new twitch account and name it something "witty" like "HungryBot". Witty, right?
 2. Sign in to the account you want the bot to operate from and request an oAuth key from https://twitchapps.com/tmi/
 3. Edit Config.txt with the correct data input and syntaxes:
-4. (NOT IMPLEMENTED YET)(Optional) Upload index.php to a webserver and simply enter the URL to that specific file.
+4. (NOT IMPLEMENTED YET)(Optional) Upload index.php to a webserver and simply enter the URL to that specific file in Config.txt.
 
 >[BotName] = "HungryBot"  
->[oAuthPassword] = "" //Key from: https://twitchapps.com/tmi/ (Sign-in into the correct account first)   
->[ChannelName] = "" // The channel the bot should join  
+>[oAuthPassword] = "oauth:7vpvoqyc8jll3yw722ymwkdwnscbz4" //Key from: https://twitchapps.com/tmi/ (Sign-in into the correct account first)   
+>[ChannelName] = "bert_ika" // The channel the bot should join  
+>[OnlineMode] = "TRUE"   
+>[OnlineURL] = "http://google.se/statistics/TwitchBot/index.php"; (NOT IMPLEMENTED YET)
 >  
 >[Host] = "irc.chat.twitch.tv" // IRC address | IP  
 >[Port] = "6667" // Port
