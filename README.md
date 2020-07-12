@@ -1,4 +1,5 @@
 # TwitchBot
+![](http://bytevaultstudio.se/ShareX/HungryBot_jWH9wpuXaL.png)
 A simple twitchbot which was a requested "HungryBot" ~ A hungry counter with a few commands on both client and chat side.
 Should not be too advanced to modify for your own needs.
 
@@ -16,9 +17,6 @@ You can set the bot to use online-mode in the Config.txt file. If you do, you ne
 OnlineMode does upload your stats when !hungry command is called from chat (Once every 30 seconds max, unless upload has been entered in bot client). 
 Upload is done with Async operation and sends Json data to the URL specified. Data is saved as "[BotName]_[ChannelName].json" so they can be somewhat uniqueue.
 If you use the same bot name and the same channel name as another bot it will overwrite the same save file. Keep in mind to make it uniqueue.
-
-
-![](http://bytevaultstudio.se/ShareX/HungryBot_jWH9wpuXaL.png)
 
 ## A few commands on client side
 ```
