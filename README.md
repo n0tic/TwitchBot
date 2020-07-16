@@ -9,8 +9,6 @@ Async operations are used with online functionality.
 It reads the connection information from an external Config.txt source file.
 Syntax is [VarName] = "VarValue".
 
-NOTE: You must verify if the bot responds to anything in the chat once it has been started. If it doesn't, please verify settings and try again. There is no way to know if the bot was successful in connecting to chat.
-
 ### Online Features
 You can set the bot to use online-mode in the Config.txt file. If you do, you need a webserver and index.php file accessable.
 OnlineMode uploads your stats when !hungry or death commands is called from chat (Once every 30 seconds max, unless upload has been entered in client console window). 
