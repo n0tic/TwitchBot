@@ -12,7 +12,7 @@ namespace TwitchBot
 {
     public class Program
     {
-        const string version = "V0.4";
+        const string version = "V0.4.1";
         public static bool debug = false;
 
         //Twitch bot (Read, Send, Resolve)
@@ -52,7 +52,6 @@ namespace TwitchBot
 
                 // We create the chatbot object
                 twitchChatBot = new TwitchChatBot(data[0]["Host"], Int32.Parse(data[0]["Port"]), data[0]["BotName"], data[0]["oAuthPassword"], data[0]["ChannelName"], data[0]["OnlineMode"], data[0]["OnlineURL"], true);
-                Console.WriteLine("NOTE: Bot has no way checking if connection was successful. Please verify by chat-command.");
                 Console.WriteLine("Client commands? Write \"help\" or \"commands\"");
             }
             catch (KeyNotFoundException e)

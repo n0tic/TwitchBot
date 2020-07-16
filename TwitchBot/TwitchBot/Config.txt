@@ -1,6 +1,6 @@
 ﻿﻿[BotName] = "TwitchMultiBot"
-[oAuthPassword] = "oauth:6xr8xk6xt9a6tt7sq9sm8gidk0qcng"
-[ChannelName] = "officialn0tic"
+[oAuthPassword] = "oauth:6du3qb9p76u020zay0vy5dexm39son"
+[ChannelName] = "bert_ika"
 
 [OnlineMode] = "TRUE"
 [OnlineURL] = "https://bytevaultstudio.se/projects/mix/TwitchBot/index.php"

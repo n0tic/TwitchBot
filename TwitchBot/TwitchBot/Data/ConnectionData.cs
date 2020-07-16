@@ -1,7 +1,12 @@
-﻿namespace TwitchBot
+﻿using System;
+
+namespace TwitchBot
 {
     public struct ConnectionData
     {
+        public DateTime timeOutTimer;
+        public bool connectedToChat;
+
         // Online
         public bool onlineMode;
         public string apiURL;

@@ -33,6 +33,12 @@ namespace TwitchBot.Object
             {
                 //Does this trigger an error since it is running on a different thread? Probably, commenting out.
                 //if (twitchChat == null || !twitchChat.Connected && reconnect) Connect();
+                if (DateTime.Now > connectionData.timeOutTimer && !connectionData.connectedToChat)
+                {
+                    Console.WriteLine("Bot could not connect. Please check Config.txt information and try again...");
+                    Thread.Sleep(8000);
+                    Environment.Exit(0);
+                }
 
                 ReadChat();
                 Thread.Sleep(50);
@@ -77,6 +83,8 @@ namespace TwitchBot.Object
             connectionData.password = password;
             connectionData.channelName = channelName;
 
+            connectionData.timeOutTimer = DateTime.Now.AddSeconds(5);
+
             reconnect = reConnect;
 
             Connect();
@@ -90,6 +98,7 @@ namespace TwitchBot.Object
             try
             {
                 twitchChat = new TcpClient(connectionData.host, connectionData.port);
+                Console.WriteLine("Connecting...");
             }
             catch(SocketException e) 
             {
@@ -109,7 +118,6 @@ namespace TwitchBot.Object
                 commandSender.Start();
                 commandReader = new Thread(() => Update());
                 commandReader.Start();
-                Console.WriteLine("Bot connected to " + connectionData.channelName + ". Online mode: " + connectionData.onlineMode.ToString() + " - Verify in chat.");
 
                 if(connectionData.onlineMode)
                     DownloadHungry();
@@ -165,6 +173,15 @@ namespace TwitchBot.Object
         {
             if (twitchChat.Available > 0) {
                 string message = reader.ReadLine();
+
+                if (message.Contains("You are in a maze of twisty passages, all alike."))
+                {
+                    connectionData.connectedToChat = true;
+                    Console.WriteLine("Bot connected to " + connectionData.channelName + ". Online mode: " + connectionData.onlineMode.ToString());
+                }
+
+                if (!connectionData.connectedToChat)
+                    return;
 
                 if (message.Contains("PING"))
                 {
@@ -285,6 +302,8 @@ namespace TwitchBot.Object
                 wc.DownloadStringCompleted += Wc_DownloadStringCompleted;
                 wc.Encoding = System.Text.Encoding.UTF8;
                 wc.Headers[HttpRequestHeader.ContentType] = "application/json";
+                if (Program.debug)
+                    Console.WriteLine("API: " + connectionData.apiURL + "?ch=" + connectionData.channelName + "&bot=" + connectionData.botName + "&d");
                 wc.DownloadStringAsync(new Uri(connectionData.apiURL + "?ch=" + connectionData.channelName + "&bot=" + connectionData.botName + "&d"));
             }
         }
