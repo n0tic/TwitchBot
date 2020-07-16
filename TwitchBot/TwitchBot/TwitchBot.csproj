@@ -49,7 +49,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Data\ConnectionData.cs" />
-    <Compile Include="Data\HungryData.cs" />
+    <Compile Include="Data\Data.cs" />
+    <Compile Include="Data\Items\DeathData.cs" />
+    <Compile Include="Data\Items\HungryData.cs" />
     <Compile Include="Extra\DisableConsoleQuickEdit.cs" />
     <Compile Include="Object\TwitchChatBot.cs" />
     <Compile Include="Program.cs" />

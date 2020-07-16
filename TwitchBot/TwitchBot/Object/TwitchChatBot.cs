@@ -1,17 +1,17 @@
-﻿using TwitchBot.Data;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Net.Sockets;
 using System.Threading;
 using System.Net;
 using Newtonsoft.Json;
+using System.Diagnostics;
 
 namespace TwitchBot.Object
 {
     public class TwitchChatBot {
         public ConnectionData connectionData;
-        public HungryData hungry = new HungryData();
+        public Data data;
 
         TcpClient twitchChat;
         StreamReader reader;
@@ -45,6 +45,7 @@ namespace TwitchBot.Object
         public void KillThreads() {
             commandSender.Abort();
             commandReader.Abort();
+            twitchChat.Close();
         }
 
         /// <summary>
@@ -56,14 +57,19 @@ namespace TwitchBot.Object
         /// <param name="password">string oAuthPassword</param>
         /// <param name="channelName">string channelname to join</param>
         /// <param name="reConnect">bool reconnect feature</param>
-        public TwitchChatBot(string host, int port, string username, string password, string channelName, string _onlineMode, bool reConnect) {
-            hungry = new HungryData();
+        public TwitchChatBot(string host, int port, string username, string password, string channelName, string _onlineMode, string _apiURL, bool reConnect) {
+            data = new Data();
 
             connectionData = new ConnectionData();
-            if (_onlineMode == "TRUE")
+
+            if (_onlineMode.ToUpper() == "TRUE")
+            {
                 connectionData.onlineMode = true;
+                connectionData.apiURL = _apiURL;
+            }
             else
                 connectionData.onlineMode = false;
+
             connectionData.host = host;
             connectionData.port = port;
 
@@ -87,7 +93,7 @@ namespace TwitchBot.Object
             }
             catch(SocketException e) 
             {
-                Console.WriteLine("Message: " + e);
+                Console.WriteLine("Message: " + e.Message);
                 Thread.Sleep(8000);
                 Environment.Exit(0);
             }
@@ -136,6 +142,8 @@ namespace TwitchBot.Object
             while (runCommandSender) {
                 if (messageQueue.Count > 0 && twitchChat.Connected) {
                     if (stopWatch.ElapsedMilliseconds > 1750) { // Check so that enough time has passed.
+                        if(Program.debug)
+                            Console.WriteLine("Sending message: " + messageQueue.Peek());
                         writer.WriteLine(messageQueue.Peek());
                         writer.Flush();
 
@@ -161,6 +169,8 @@ namespace TwitchBot.Object
                 if (message.Contains("PING"))
                 {
                     message = message.Replace("PING", "PONG");
+                    if (Program.debug)
+                        Console.WriteLine("PING Recieved; Responding with PONG: " + message);
                     writer.WriteLine(message);
                     writer.Flush();
                     return;
@@ -191,45 +201,117 @@ namespace TwitchBot.Object
             switch (msg)
             {
                 case "!hungry":
-                    hungry.timesHungryTotal++;
-                    if (DateTime.Now > hungry.nextTime)
-                    {
-                        hungry.timesHungry++;
+                        data.hungry.timesHungryTotal++;
+                        data.hungry.session_timesHungryTotal++;
+                        if (DateTime.Now > data.hungry.addNextTime)
+                        {
+                        data.hungry.timesHungry++;
+                        data.hungry.session_timesHungry++;
                         if (connectionData.onlineMode)
-                            SendHungry();
-                        hungry.nextTime = DateTime.Now.AddSeconds(30);
-                        Console.WriteLine("IN: " + DateTime.Now + " - Hungry registered!");
+                            SendData();
+                        data.hungry.addNextTime = DateTime.Now.AddSeconds(30);
+                            Console.WriteLine("IN: " + DateTime.Now + " - Hungry registered!");
+                        }
+                        break;
+                case "!removehungry":
+                    data.hungry.timesHungryTotal--;
+                    data.hungry.session_timesHungry--;
+                    if (DateTime.Now > data.hungry.removeNextTime)
+                    {
+                        data.hungry.timesHungry--;
+                        data.hungry.session_timesHungry--;
+                        if (connectionData.onlineMode)
+                            SendData();
+                        data.hungry.removeNextTime = DateTime.Now.AddSeconds(30);
+                        Console.WriteLine("IN: " + DateTime.Now + " - Hungry removed!");
                     }
                     break;
                 case "!howhungry":
-                    Console.WriteLine("OUT: " + DateTime.Now + " - The word \"hungry\" has been said " + hungry.timesHungry.ToString() + " time(s).");
-                    SendMsg("The word \"hungry\" has been said " + hungry.timesHungry.ToString() + " time(s).");
+                        Console.WriteLine("OUT: " + DateTime.Now + " - The word \"hungry\" has been said " + data.hungry.timesHungry.ToString() + " time(s). This session: " + data.hungry.session_timesHungry.ToString() + " time(s).");
+                        SendMsg("The word \"hungry\" has been said " + data.hungry.timesHungry.ToString() + " time(s). This session: " + data.hungry.session_timesHungry.ToString() + " time(s).");
+                        break;
+                    case "!hungrycount":
+                        Console.WriteLine("OUT: " + DateTime.Now + " - Counted the command \"!hungry\" being called " + data.hungry.timesHungryTotal.ToString() + " time(s). This session: " + data.hungry.session_timesHungryTotal.ToString() + " time(s).");
+                        SendMsg("Counted the command \"!hungry\" being called " + data.hungry.timesHungryTotal.ToString() + " time(s). This session: " + data.hungry.session_timesHungryTotal.ToString() + " time(s).");
+                        break;
+                case "!death":
+                case "!dead":
+                case "!died":
+                    data.deaths.deathsTotal++;
+                    data.deaths.session_deathsTotal++;
+                    if (DateTime.Now > data.deaths.addNextTime)
+                    {
+                        data.deaths.deaths++;
+                        data.deaths.session_deaths++;
+                        if (connectionData.onlineMode)
+                            SendData();
+                        data.deaths.addNextTime = DateTime.Now.AddSeconds(30);
+                        Console.WriteLine("IN: " + DateTime.Now + " - Death registered!");
+                    }
                     break;
-                case "!hungrycount":
-                    Console.WriteLine("OUT: " + DateTime.Now + " - Counted the command \"!hungry\" being called " + hungry.timesHungryTotal.ToString() + " time(s).");
-                    SendMsg("Counted the command \"!hungry\" being called " + hungry.timesHungryTotal.ToString() + " time(s).");
+                case "!removedeath":
+                    data.deaths.deathsTotal--;
+                    data.deaths.session_deathsTotal--;
+                    if (DateTime.Now > data.deaths.removeNextTime)
+                    {
+                        data.deaths.deaths--;
+                        data.deaths.session_deaths--;
+                        if (connectionData.onlineMode)
+                            SendData();
+                        data.deaths.removeNextTime = DateTime.Now.AddSeconds(30);
+                        Console.WriteLine("IN: " + DateTime.Now + " - Death removed!");
+                    }
+                    break; 
+                case "!deathcount":
+                    Console.WriteLine("OUT: " + DateTime.Now + " - " + connectionData.channelName + " has died " + data.deaths.deaths.ToString() + " time(s). This session: " + data.deaths.deaths.ToString() + " time(s).");
+                    SendMsg("" + connectionData.channelName + " has died " + data.hungry.timesHungry.ToString() + " time(s). This session: " + data.deaths.deaths.ToString() + " time(s).");
+                    break;
+                case "!deathcounttotal":
+                    Console.WriteLine("OUT: " + DateTime.Now + " - Counted the command death being called " + data.deaths.deathsTotal.ToString() + " time(s). This session: " + data.deaths.deathsTotal.ToString() + " time(s).");
+                    SendMsg("Counted the command \"!hungry\" being called " + data.hungry.timesHungryTotal.ToString() + " time(s). This session: " + data.deaths.deathsTotal.ToString() + " time(s).");
                     break;
                 case "!help":
-                    Console.WriteLine("OUT: " +  DateTime.Now + " - !hungry should be called once the word \"Hungry\" is heard verbally on stream. !howhungry will print out how many times it has been counted. !hungrycount will print out ALL the times \"!hungry\" was found in chat. !help displays this message.");
-                    SendMsg("!hungry should be called once the word \"Hungry\" is heard verbally on stream. !howhungry will print out how many times it has been counted. !hungrycount will print out ALL the times \"!hungry\" was found in chat. !help displays this message.");
-                    break;
+                        Console.WriteLine("OUT: " +  DateTime.Now + " - Printed out !help message in chat.");
+                        SendMsg("Write !hungry if the streamer said he/she is hungry to add to counter. !howhungry will tell you the counted number. !hungrycount will print out ALL information. !removehungry will decrease the counter.");
+                        SendMsg("Write !death, !dead, !died once the streamer gets killed to add to counter. !deathcount will tell you the counted number. !deathcounttotal will print out ALL information. !removedeath will decrease the counter.");
+                        SendMsg("!help displays this message");
+                        break;
             }
         }
 
-        public void DownloadHungry()
-        {
+        public void DownloadHungry() {
             using (WebClient wc = new WebClient())
             {
                 wc.DownloadStringCompleted += Wc_DownloadStringCompleted;
                 wc.Encoding = System.Text.Encoding.UTF8;
                 wc.Headers[HttpRequestHeader.ContentType] = "application/json";
-                wc.DownloadStringAsync(new Uri("https://bytevaultstudio.se/projects/mix/TwitchBot/?ch=" + connectionData.channelName + "&d"));
+                wc.DownloadStringAsync(new Uri(connectionData.apiURL + "?ch=" + connectionData.channelName + "&bot=" + connectionData.botName + "&d"));
             }
         }
 
-        private void Wc_DownloadStringCompleted(object sender, DownloadStringCompletedEventArgs e)
-        {
-            if(e.Error == null)
+        private void Wc_DownloadStringCompleted(object sender, DownloadStringCompletedEventArgs e) {
+            try
+            {
+                if (e.Error != null) Console.WriteLine("Download: The remote server returned an error: " + e.Error.Message);
+            }
+            catch (System.Reflection.TargetInvocationException)
+            {
+                Console.WriteLine("Download Error: No data.");
+            }
+
+            if (Program.debug)
+            {
+                try
+                {
+                    if (e.Result != null) Console.WriteLine("Download: The remote server returned: " + e.Result);
+                }
+                catch (System.Reflection.TargetInvocationException)
+                {
+                    Console.WriteLine("Download Result: No data.");
+                }
+            }
+
+            if (e.Error == null)
             {
                 switch (e.Result)
                 {
@@ -240,7 +322,7 @@ namespace TwitchBot.Object
                     default:
                         try
                         {
-                            hungry = JsonConvert.DeserializeObject<HungryData>(e.Result);
+                            data = JsonConvert.DeserializeObject<Data>(e.Result);
                             Console.WriteLine("Console: Data loaded.");
                         }
                         catch (JsonException)
@@ -252,18 +334,39 @@ namespace TwitchBot.Object
             }
         }
 
-        public void SendHungry() {
-            string data = JsonConvert.SerializeObject(hungry);
+        public void SendData() {
+            string sndData = JsonConvert.SerializeObject(data);
 
             using(WebClient wc = new WebClient()) {
                 wc.UploadStringCompleted += Wc_UploadStringCompleted;
                 wc.Encoding = System.Text.Encoding.UTF8;
                 wc.Headers[HttpRequestHeader.ContentType] = "application/json";
-                wc.UploadStringAsync(new Uri("https://bytevaultstudio.se/projects/mix/TwitchBot/?ch=" + connectionData.channelName + "&u"), "POST", data);
+                wc.UploadStringAsync(new Uri(connectionData.apiURL + "?ch=" + connectionData.channelName + "&bot=" + connectionData.botName + "&u"), "POST", sndData);
             }
         }
 
         private void Wc_UploadStringCompleted(object sender, UploadStringCompletedEventArgs e) {
+            try
+            {
+                if (e.Error != null) Console.WriteLine("Upload: The remote server returned an error: " + e.Error.Message);
+            }
+            catch (System.Reflection.TargetInvocationException)
+            {
+                Console.WriteLine("Upload Error: No data.");
+            }
+
+            if (Program.debug)
+            {
+                try
+                {
+                    if (e.Result != null) Console.WriteLine("Download: The remote server returned: " + e.Result);
+                }
+                catch (System.Reflection.TargetInvocationException)
+                {
+                    Console.WriteLine("Upload Result: No data.");
+                }
+            }
+
             if (e.Error == null)
             {
                 switch (e.Result)
@@ -273,7 +376,7 @@ namespace TwitchBot.Object
                         break;
                     case "NoWrite":
                     case "NoAccess":
-                        Console.WriteLine("Console: Upload failed.");
+                        Console.WriteLine("Console: Upload failed. Write access denied.");
                         break;
                 }
             }

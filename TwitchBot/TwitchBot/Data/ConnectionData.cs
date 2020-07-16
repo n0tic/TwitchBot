@@ -1,4 +1,4 @@
-﻿namespace TwitchBot.Data
+﻿namespace TwitchBot
 {
     public struct ConnectionData
     {

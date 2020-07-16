@@ -30,14 +30,8 @@ namespace TwitchBot.Extra
             }
 
             // Clear the quick edit bit in the mode flags
-            if (SetEnabled)
-            {
-                consoleMode &= ~ENABLE_QUICK_EDIT;
-            }
-            else
-            {
-                consoleMode |= ENABLE_QUICK_EDIT;
-            }
+            if (!SetEnabled) consoleMode |= ENABLE_QUICK_EDIT;
+            else consoleMode &= ~ENABLE_QUICK_EDIT;
 
             // set the new mode
             if (!SetConsoleMode(consoleHandle, consoleMode))

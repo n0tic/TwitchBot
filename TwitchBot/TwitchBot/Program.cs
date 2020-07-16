@@ -12,13 +12,14 @@ namespace TwitchBot
 {
     public class Program
     {
-        const string version = "V0.3";
-        public static bool debug = true;
+        const string version = "V0.4";
+        public static bool debug = false;
 
         //Twitch bot (Read, Send, Resolve)
         public static TwitchChatBot twitchChatBot;
 
-        static List<Dictionary<string, string>> data = new List<Dictionary<string, string>>(); //Config.txt data
+        //Config.txt data
+        static List<Dictionary<string, string>> data = new List<Dictionary<string, string>>();
 
         static void Main(string[] args)
         {
@@ -78,13 +79,13 @@ namespace TwitchBot
                         Console.WriteLine("\"quit\", \"exit\" will shutdown the bot.");
                         break;
                     case "reconnect": // Reconnect and save data
-                        HungryData hungry = ObjectClone<HungryData>(twitchChatBot.hungry);
+                        Data bot_data = ObjectClone<Data>(twitchChatBot.data);
                         twitchChatBot.KillThreads();
                         twitchChatBot = new TwitchChatBot(data[0]["Host"], Int32.Parse(data[0]["Port"]), data[0]["BotName"], data[0]["oAuthPassword"], data[0]["ChannelName"], data[0]["OnlineMode"], data[0]["OnlineURL"], true);
-                        twitchChatBot.hungry = hungry;
+                        twitchChatBot.data = bot_data;
                         break;
                     case "reset":
-                        twitchChatBot.hungry = new HungryData();
+                        twitchChatBot.data = new Data();
                         Console.Clear();
                         Console.WriteLine("Program reset! Online stats are refreshed upon next !hungry command.");
                         break;
@@ -92,7 +93,8 @@ namespace TwitchBot
                     case "status":
                     case "count":
                         Console.Clear();
-                        Console.WriteLine("The word \"hungry\" has been said " + twitchChatBot.hungry.timesHungry.ToString() + " time(s). Total count of !hungry is " + twitchChatBot.hungry.timesHungryTotal.ToString());
+                        Console.WriteLine("The word \"hungry\" has been said " + twitchChatBot.data.hungry.timesHungry.ToString() + " time(s). Total count of !hungry is " + twitchChatBot.data.hungry.timesHungryTotal.ToString() + ". This session: " + twitchChatBot.data.hungry.session_timesHungry.ToString() + " time(s) - Total: " + twitchChatBot.data.hungry.session_timesHungryTotal.ToString());
+                        Console.WriteLine("Death has been registered " + twitchChatBot.data.hungry.timesHungry.ToString() + " time(s). Total count of death (command) is " + twitchChatBot.data.hungry.timesHungryTotal.ToString() + ". This session: " + twitchChatBot.data.deaths.session_deaths.ToString() + " time(s) - Total: " + twitchChatBot.data.deaths.session_deathsTotal.ToString());
                         break;
                     case "clear":
                         Console.Clear();
@@ -100,7 +102,7 @@ namespace TwitchBot
                     case "upload":
                         Console.Clear();
                         if (twitchChatBot.connectionData.onlineMode)
-                            twitchChatBot.SendHungry();
+                            twitchChatBot.SendData();
                         break;
                     case "quit":
                     case "exit":
