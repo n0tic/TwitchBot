@@ -109,7 +109,7 @@ namespace TwitchBot.Object
                 commandSender.Start();
                 commandReader = new Thread(() => Update());
                 commandReader.Start();
-                Console.WriteLine("Bot connected to " + connectionData.channelName + ". Online mode: " + connectionData.onlineMode.ToString());
+                Console.WriteLine("Bot connected to " + connectionData.channelName + ". Online mode: " + connectionData.onlineMode.ToString() + " - Verify in chat.");
 
                 if(connectionData.onlineMode)
                     DownloadHungry();
